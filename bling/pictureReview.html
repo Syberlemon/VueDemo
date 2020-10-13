@@ -8,17 +8,15 @@
 	</head>
 	<body>
 		<div id="pic">
-			<button v-on:click="getpic">获取图片</button><br>
-			<img :src="img_src" /><br/>
-			图片地址：
-			{{img_src}}<br/>
+			<button v-on:click="getpic">获取图片</button>图片地址：{{path}}<br>
+			<img :src="path" /><br/>
 		
 			是否删除：
 			<input type="radio" name="del" value="1" v-model="del">是 
 			<input type="radio" name="del" value="0" v-model="del">否<br/>
 			
 			图片备注：<br>
-			<textarea name="desc" cols="50" rows="20" v-model="desc"></textarea></br>
+			<textarea name="desc" cols="50" rows="20" v-model="tag"></textarea></br>
 
 			<button type="submit" value="确定" v-on:click=submit()>保存</button>
 		</div>
@@ -29,24 +27,24 @@
 		  el: '#pic',
 		  data: {
 			  id: '389',
-			  img_src: '',
-			  del: '1',
-			  desc: ''
+			  path: '',
+			  del: '0',
+			  tag: ''
 		  },
 		  methods: {
 			  getpic: function(){
 				  var that = this;
 				  axios.get('http://localhost:8080/getPicture?id='+that.id).then(function (response) {
-				  		that.img_src = '../static/' + response.data.path;
+				  		that.path = '../static/' + response.data.path;
 				  })
 			  },
 			  submit: function(){
 				  var that = this;
 				  axios.post("http://localhost:8080/setPicture",{
 				                  id: that.id,
-				                  img_src: that.img_src,
+				                  path: that.path,
 				                  del: that.del,
-				                  desc: that.desc,
+				                  tag: that.tag,
 				              }).then(res=>{
 				                 console.log(res);
 				              })
