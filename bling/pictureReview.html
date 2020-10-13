@@ -7,11 +7,20 @@
 		<script src="../axios.min.js" type="text/javascript" charset="utf-8"></script>
 	</head>
 	<body>
-		<!-- <img src="../static/39a7f075-82d0-4dcf-a6ca-30eef09caade.png"/> -->
 		<div id="pic">
 			<button v-on:click="getpic">获取图片</button><br>
 			<img :src="img_src" /><br/>
-			图片地址：{{img_src}}
+			图片地址：
+			{{img_src}}<br/>
+		
+			是否删除：
+			<input type="radio" name="del" value="1" v-model="del">是 
+			<input type="radio" name="del" value="0" v-model="del">否<br/>
+			
+			图片备注：<br>
+			<textarea name="desc" cols="50" rows="20" v-model="desc"></textarea></br>
+
+			<button type="submit" value="确定" v-on:click=submit()>保存</button>
 		</div>
 	</body>
 	
@@ -19,14 +28,29 @@
 		new Vue({
 		  el: '#pic',
 		  data: {
+			  id: '389',
 			  img_src: '',
+			  del: '1',
+			  desc: ''
 		  },
 		  methods: {
 			  getpic: function(){
 				  var that = this;
-				  axios.get('http://localhost:8080/getPicture?id=389').then(function (response) {
+				  axios.get('http://localhost:8080/getPicture?id='+that.id).then(function (response) {
 				  		that.img_src = '../static/' + response.data.path;
 				  })
+			  },
+			  submit: function(){
+				  var that = this;
+				  axios.post("http://localhost:8080/setPicture",{
+				                  id: that.id,
+				                  img_src: that.img_src,
+				                  del: that.del,
+				                  desc: that.desc,
+				              }).then(res=>{
+				                 console.log(res);
+				              })
+				  console.log(that.del);
 			  }
 		  }
 		});
