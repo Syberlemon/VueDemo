@@ -3,8 +3,32 @@
 	<head>
 		<meta charset="utf-8">
 		<title></title>
+		<script src="../vue.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../axios.min.js" type="text/javascript" charset="utf-8"></script>
 	</head>
 	<body>
-		<img src="http://localhost:8080/getPicture/1"/>
+		<!-- <img src="../static/39a7f075-82d0-4dcf-a6ca-30eef09caade.png"/> -->
+		<div id="pic">
+			<button v-on:click="getpic">获取图片</button><br>
+			<img :src="img_src" /><br/>
+			图片地址：{{img_src}}
+		</div>
 	</body>
+	
+	<script>
+		new Vue({
+		  el: '#pic',
+		  data: {
+			  img_src: '',
+		  },
+		  methods: {
+			  getpic: function(){
+				  var that = this;
+				  axios.get('http://localhost:8080/getPicture?id=389').then(function (response) {
+				  		that.img_src = '../static/' + response.data.path;
+				  })
+			  }
+		  }
+		});
+    </script>
 </html>
