@@ -9,14 +9,20 @@
 	<body>
 		<div id="pic">
 			<button v-on:click="getpic">获取图片</button>图片地址：{{path}}<br>
-			<img :src="path" /><br/>
+			<!-- <img :src="path" /><br/> -->
 		
 			是否删除：
-			<input type="radio" name="del" value="1" v-model="del">是 
-			<input type="radio" name="del" value="0" v-model="del">否<br/>
+			<input type="radio" value="1" v-model="del">是 
+			<input type="radio" value="0" v-model="del">否<br/>
+			
+			<input type="checkbox" value="饭" v-model="tag">饭
+			<input type="checkbox" value="衣服" v-model="tag">衣服
+			<input type="checkbox" value="产检" v-model="tag">产检
+			<input type="checkbox" value="文章" v-model="tag">文章
+			<br/>
 			
 			图片备注：<br>
-			<textarea name="desc" cols="50" rows="20" v-model="tag"></textarea></br>
+			<textarea cols="50" rows="10" v-model="desc"></textarea></br>
 
 			<button type="submit" value="确定" v-on:click=submit()>保存</button>
 		</div>
@@ -27,9 +33,10 @@
 		  el: '#pic',
 		  data: {
 			  id: '389',
-			  path: '',
+			  path: 'G:\\Photo\\103APPLE\\IMG_3602.JPG',
 			  del: '0',
-			  tag: ''
+			  tag: [],
+			  desc: ''
 		  },
 		  methods: {
 			  getpic: function(){
@@ -40,11 +47,16 @@
 			  },
 			  submit: function(){
 				  var that = this;
+				  var tagStr = '';
+				  for (var k = 0; k < that.tag.length; k++) {
+				        tagStr += that.tag[k] + ","
+				  } 
 				  axios.post("http://localhost:8080/setPicture",{
 				                  id: that.id,
 				                  path: that.path,
 				                  del: that.del,
-				                  tag: that.tag,
+				                  tag: tagStr,
+								  desc: that.desc
 				              }).then(res=>{
 				                 console.log(res);
 				              })
